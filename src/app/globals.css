@@ -130,3 +130,80 @@
     transform: translateY(0);
   }
 }
+
+/* Webropol survey popup — responsive, no dependencies */
+.wbpl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 24px 24px;
+  background: transparent;
+  pointer-events: none;
+}
+.wbpl-overlay[hidden] {
+  display: none;
+}
+.wbpl-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+  max-height: min(70vh, 640px);
+  border-radius: 18px;
+  animation: wbpl-pop 0.25s ease;
+  pointer-events: auto;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+.wbpl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  font: 600 15px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #0f172a;
+}
+.wbpl-close {
+  border: 0;
+  background: transparent;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: #64748b;
+}
+.wbpl-close:hover {
+  color: #0f172a;
+}
+.wbpl-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+}
+@keyframes wbpl-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 640px) {
+  .wbpl-overlay {
+    padding: 0;
+  }
+  .wbpl-card {
+    max-width: none;
+    max-height: none;
+    height: 100dvh;
+    border-radius: 0;
+  }
+}
