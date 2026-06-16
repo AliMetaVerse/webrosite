@@ -315,6 +315,17 @@
     display: none !important;
   }
 
+  /* Brand logo swaps to the white lockup on the dark cinematic theme. */
+  .logo-img--dark {
+    display: none;
+  }
+  [data-theme="cinematic"] .logo-img--light {
+    display: none;
+  }
+  [data-theme="cinematic"] .logo-img--dark {
+    display: inline-block;
+  }
+
   .animate-float {
     animation: float 7s ease-in-out infinite;
   }
