@@ -16,7 +16,7 @@ export function Logo({ className = "" }: { className?: string }) {
           <path d="M3 13h4l2 5 4-12 2 7h6" />
         </svg>
       </span>
-      <span className="text-[1.35rem] font-semibold tracking-tight text-ink-900">
+      <span className="text-[1.35rem] font-semibold tracking-tight text-fg">
         Webropol
       </span>
     </span>

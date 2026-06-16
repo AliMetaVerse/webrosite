@@ -37,7 +37,7 @@ const features = [
 
 export function Why() {
   return (
-    <section id="why" className="bg-white py-20 lg:py-28">
+    <section id="why" className="bg-surface py-20 lg:py-28">
       <div className="container-x">
         <SectionHeading
           eyebrow="Why choose Webropol"
@@ -46,27 +46,24 @@ export function Why() {
         />
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
+          {features.map((f) => (
             <div
               key={f.title}
-              className={`group relative rounded-3xl border border-ink-100 bg-white p-7 transition-all hover:-translate-y-1 hover:border-teal-200 hover:shadow-xl hover:shadow-ink-900/5 ${
-                i === 0 ? "lg:col-span-1" : ""
-              }`}
+              className="group surface-card card-lift p-7 hover:border-line-strong"
             >
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-50 to-grape-50 text-teal-700 ring-1 ring-inset ring-teal-100 transition-colors group-hover:from-teal-100 group-hover:to-grape-100">
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-card bg-panel text-brand-text ring-1 ring-inset ring-line">
                 <f.icon className="text-2xl" />
               </span>
-              <h3 className="mt-5 text-lg font-semibold text-ink-900">
-                {f.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-600">
-                {f.body}
-              </p>
+              <h3 className="mt-5 text-lg font-semibold text-fg">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{f.body}</p>
             </div>
           ))}
 
-          <div className="relative flex flex-col justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-teal-600 to-grape-600 p-7 text-white">
-            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+          <div className="brand-surface relative flex flex-col justify-center overflow-hidden rounded-card p-7">
+            <div
+              className="deco absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl"
+              aria-hidden
+            />
             <h3 className="text-xl font-semibold">Built for impact</h3>
             <p className="mt-2 text-sm leading-relaxed text-white/85">
               Great customer experience starts with happy employees. Webropol

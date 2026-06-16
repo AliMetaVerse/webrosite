@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { SurveyWidget } from "@/components/survey-widget";
+import { WidgetInjector } from "@/components/widget-injector";
+import { readWidgets } from "@/lib/widgets";
+import { themeBootScript } from "@/components/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,28 +38,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const widgets = await readWidgets();
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
+        {/* Applies the saved design theme before first paint (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <link
           rel="stylesheet"
           href="https://kit.fontawesome.com/50ef2d3cf8.css"
           crossOrigin="anonymous"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-white text-ink-900">
-        <Navbar />
+      <body className="min-h-full flex flex-col bg-surface text-fg">
+        <Navbar initialWidgets={widgets} />
         <main className="flex-1">{children}</main>
         <Footer />
-        <SurveyWidget />
+        <WidgetInjector widgets={widgets.filter((w) => w.enabled)} />
       </body>
     </html>
   );

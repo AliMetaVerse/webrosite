@@ -1,15 +1,22 @@
 @import "tailwindcss";
 
 /*
-  Webropol-inspired design system
-  Brand palette: teal primary, deep indigo/purple accent, warm neutrals.
+  Webropol design system
+  ----------------------------------------------------------------------------
+  Three switchable "design directions", selected via [data-theme] on <html>:
+
+    editorial  — Editorial Light  (Stripe / Ramp / Mercury feel)
+    cinematic  — Cinematic Dark   (Linear / Vercel feel)
+    swiss      — Swiss Corporate  (Anthropic / print-grid feel)
+
+  Components never reference raw palette values. They consume the *semantic*
+  tokens below (surface / fg / brand / line / ...) through Tailwind utilities
+  such as `bg-surface`, `text-fg`, `border-line`, `rounded-card`. Each theme
+  re-maps those tokens, so a single attribute swap re-skins the whole site.
 */
 
 @theme {
-  --color-background: #ffffff;
-  --color-foreground: #101828;
-
-  /* Teal — primary brand */
+  /* Raw brand palette — referenced only by the semantic token blocks below. */
   --color-teal-50: #effdfb;
   --color-teal-100: #c9f7f1;
   --color-teal-200: #97ede4;
@@ -21,7 +28,6 @@
   --color-teal-800: #0f5453;
   --color-teal-900: #114645;
 
-  /* Indigo / purple — accent */
   --color-grape-50: #f3f1ff;
   --color-grape-100: #e9e4ff;
   --color-grape-200: #d6ccff;
@@ -33,7 +39,6 @@
   --color-grape-800: #421d99;
   --color-grape-900: #381b7d;
 
-  /* Ink neutrals */
   --color-ink-50: #f7f8fa;
   --color-ink-100: #eef0f4;
   --color-ink-200: #dde1e9;
@@ -47,8 +52,157 @@
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
 
-  --radius-4xl: 2rem;
+/* Map semantic tokens to Tailwind utilities. `inline` inlines the var()
+   reference into each utility so the runtime [data-theme] cascade is honoured. */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-text: var(--brand-text);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+
+  --radius-card: var(--card-radius);
+  --radius-btn: var(--btn-radius);
+}
+
+/* ---------------------------------------------------------------- *
+ *  Editorial Light — the default
+ * ---------------------------------------------------------------- */
+:root,
+[data-theme="editorial"] {
+  --surface: #ffffff;
+  --panel: #f7f8fa;
+  --card: #ffffff;
+  --card-2: #f7f8fa;
+  --line: #eef0f4;
+  --line-strong: #dde1e9;
+
+  --fg: #101828;
+  --muted: #4d5667;
+  --faint: #6b7589;
+
+  --brand: #0a857f;
+  --brand-hover: #0c6a67;
+  --brand-ink: #ffffff;
+  --brand-text: #0a857f;
+  --accent: #6028e0;
+  --accent-text: #5020bc;
+
+  --ring: #0a857f;
+  --shadow: 0 18px 40px -22px rgba(16, 24, 40, 0.28);
+  --shadow-soft: 0 1px 2px rgba(16, 24, 40, 0.06);
+
+  --card-radius: 1.25rem;
+  --btn-radius: 9999px;
+
+  --grad-from: #11a79e;
+  --grad-to: #7445f5;
+  --panel-grad: linear-gradient(135deg, #0a857f 0%, #5020bc 100%);
+
+  --eyebrow-bg: #effdfb;
+  --eyebrow-fg: #0c6a67;
+  --eyebrow-ring: #c9f7f1;
+
+  --glow-1: rgba(44, 194, 184, 0.30);
+  --glow-2: rgba(148, 114, 255, 0.28);
+  --grid-line: rgba(16, 24, 40, 0.04);
+}
+
+/* ---------------------------------------------------------------- *
+ *  Cinematic Dark
+ * ---------------------------------------------------------------- */
+[data-theme="cinematic"] {
+  --surface: #080b12;
+  --panel: #0c111c;
+  --card: #111a2b;
+  --card-2: #0e1626;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --fg: #f3f6fb;
+  --muted: #9aa6b8;
+  --faint: #6f7d92;
+
+  --brand: #2cc2b8;
+  --brand-hover: #5cdcd1;
+  --brand-ink: #052523;
+  --brand-text: #5cdcd1;
+  --accent: #9472ff;
+  --accent-text: #b8a5ff;
+
+  --ring: #2cc2b8;
+  --shadow: 0 30px 80px -28px rgba(0, 0, 0, 0.85);
+  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --card-radius: 1.25rem;
+  --btn-radius: 9999px;
+
+  --grad-from: #5cdcd1;
+  --grad-to: #b8a5ff;
+  --panel-grad: linear-gradient(135deg, #0c2e2c 0%, #211a4d 100%);
+
+  --eyebrow-bg: rgba(44, 194, 184, 0.10);
+  --eyebrow-fg: #5cdcd1;
+  --eyebrow-ring: rgba(44, 194, 184, 0.28);
+
+  --glow-1: rgba(44, 194, 184, 0.45);
+  --glow-2: rgba(148, 114, 255, 0.42);
+  --grid-line: rgba(255, 255, 255, 0.05);
+}
+
+/* ---------------------------------------------------------------- *
+ *  Swiss Corporate
+ * ---------------------------------------------------------------- */
+[data-theme="swiss"] {
+  --surface: #fbfaf7;
+  --panel: #f1efe9;
+  --card: #ffffff;
+  --card-2: #f6f4ef;
+  --line: #e3e0d7;
+  --line-strong: #161616;
+
+  --fg: #161616;
+  --muted: #45433d;
+  --faint: #6f6c63;
+
+  --brand: #161616;
+  --brand-hover: #000000;
+  --brand-ink: #ffffff;
+  --brand-text: #0c6a67;
+  --accent: #5020bc;
+  --accent-text: #5020bc;
+
+  --ring: #161616;
+  --shadow: none;
+  --shadow-soft: none;
+
+  --card-radius: 0.125rem;
+  --btn-radius: 0.125rem;
+
+  /* Swiss avoids gradient flourishes — both stops resolve to the ink colour. */
+  --grad-from: #161616;
+  --grad-to: #161616;
+  --panel-grad: #161616;
+
+  --eyebrow-bg: transparent;
+  --eyebrow-fg: #161616;
+  --eyebrow-ring: #161616;
+
+  --glow-1: transparent;
+  --glow-2: transparent;
+  --grid-line: rgba(22, 22, 22, 0.05);
 }
 
 @layer base {
@@ -56,14 +210,24 @@
     scroll-behavior: smooth;
   }
   body {
-    background: var(--color-background);
-    color: var(--color-foreground);
+    background: var(--surface);
+    color: var(--fg);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
   ::selection {
-    background: var(--color-teal-200);
-    color: var(--color-ink-900);
+    background: color-mix(in srgb, var(--brand) 28%, transparent);
+    color: var(--fg);
+  }
+
+  /* Smooth cross-fade when the design direction is switched. */
+  @media (prefers-reduced-motion: no-preference) {
+    body * {
+      transition-property: background-color, border-color, color, fill, stroke,
+        box-shadow;
+      transition-duration: 280ms;
+      transition-timing-function: ease;
+    }
   }
 }
 
@@ -80,25 +244,75 @@
     }
   }
 
+  /* Pill / tag label above section headings. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--btn-radius);
+    padding: 0.4rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--eyebrow-bg);
+    color: var(--eyebrow-fg);
+    box-shadow: inset 0 0 0 1px var(--eyebrow-ring);
+  }
+
+  /* Brand wash used for headline accent words. Solid in Swiss. */
   .text-gradient {
-    background: linear-gradient(
-      100deg,
-      var(--color-teal-500),
-      var(--color-grape-500)
-    );
+    background: linear-gradient(100deg, var(--grad-from), var(--grad-to));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
+  /* Large coloured feature band (CTA / Mission / highlight cards). */
+  .brand-surface {
+    background: var(--panel-grad);
+    color: #ffffff;
+  }
+
+  /* Card recipe — flat + sharp in Swiss, soft + rounded elsewhere. */
+  .surface-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--card-radius);
+  }
+  .card-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease,
+      border-color 0.3s ease;
+  }
+  .card-lift:hover {
+    box-shadow: var(--shadow);
+  }
+  [data-theme="editorial"] .card-lift:hover,
+  [data-theme="cinematic"] .card-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow);
+  }
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
   .bg-grid {
     background-image: linear-gradient(
         to right,
-        rgba(16, 24, 40, 0.04) 1px,
+        var(--grid-line) 1px,
         transparent 1px
       ),
-      linear-gradient(to bottom, rgba(16, 24, 40, 0.04) 1px, transparent 1px);
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-size: 48px 48px;
+  }
+
+  /* Decorative glow / grid layers — suppressed entirely in Swiss. */
+  [data-theme="swiss"] .deco {
+    display: none !important;
   }
 
   .animate-float {
@@ -107,6 +321,13 @@
   .animate-rise {
     opacity: 0;
     animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-rise {
+      animation: none;
+      opacity: 1;
+    }
   }
 }
 

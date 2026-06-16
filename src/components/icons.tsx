@@ -33,8 +33,13 @@ export const CheckIcon = makeIcon(`${duotone} fa-check`, "CheckIcon");
 export const MenuIcon = makeIcon(`${duotone} fa-bars`, "MenuIcon");
 export const CloseIcon = makeIcon(`${duotone} fa-xmark`, "CloseIcon");
 export const PhoneIcon = makeIcon(`${duotone} fa-phone`, "PhoneIcon");
+export const GearIcon = makeIcon(`${duotone} fa-gear`, "GearIcon");
+export const PlusIcon = makeIcon(`${duotone} fa-plus`, "PlusIcon");
+export const TrashIcon = makeIcon(`${duotone} fa-trash`, "TrashIcon");
 export const MailIcon = makeIcon(`${duotone} fa-envelope`, "MailIcon");
 export const PinIcon = makeIcon(`${duotone} fa-location-dot`, "PinIcon");
+export const PaletteIcon = makeIcon(`${duotone} fa-swatchbook`, "PaletteIcon");
+export const CheckMiniIcon = makeIcon(`${duotone} fa-check`, "CheckMiniIcon");
 
 // Brand marks are single-tone in Font Awesome.
 export const LinkedInIcon = makeIcon("fa-brands fa-linkedin-in fa-fw", "LinkedInIcon");

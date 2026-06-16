@@ -34,7 +34,7 @@ const offices = [
 
 export function Locations() {
   return (
-    <section className="bg-ink-50 py-20 lg:py-28">
+    <section className="bg-panel py-20 lg:py-28">
       <div className="container-x">
         <SectionHeading
           eyebrow="Local presence"
@@ -45,31 +45,29 @@ export function Locations() {
           {offices.map((o) => (
             <div
               key={o.country}
-              className="group flex flex-col rounded-3xl border border-ink-100 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-ink-900/5"
+              className="group surface-card card-lift flex flex-col p-6"
             >
               <span className="text-3xl" aria-hidden>
                 {o.flag}
               </span>
-              <h3 className="mt-4 text-lg font-semibold text-ink-900">
-                {o.country}
-              </h3>
-              <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-ink-500">
-                <PinIcon className="text-base text-teal-600" />
+              <h3 className="mt-4 text-lg font-semibold text-fg">{o.country}</h3>
+              <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-faint">
+                <PinIcon className="text-base text-brand-text" />
                 {o.city}
               </p>
-              <div className="mt-5 space-y-2.5 border-t border-ink-100 pt-5 text-sm">
+              <div className="mt-5 space-y-2.5 border-t border-line pt-5 text-sm">
                 <a
                   href={`tel:${o.phone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-2 text-ink-600 transition-colors hover:text-teal-700"
+                  className="flex items-center gap-2 text-muted transition-colors hover:text-brand-text"
                 >
-                  <PhoneIcon className="text-base text-ink-400" />
+                  <PhoneIcon className="text-base text-faint" />
                   {o.phone}
                 </a>
                 <a
                   href={`mailto:${o.email}`}
-                  className="flex items-center gap-2 text-ink-600 transition-colors hover:text-teal-700"
+                  className="flex items-center gap-2 text-muted transition-colors hover:text-brand-text"
                 >
-                  <MailIcon className="text-base text-ink-400" />
+                  <MailIcon className="text-base text-faint" />
                   {o.email}
                 </a>
               </div>

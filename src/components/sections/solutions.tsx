@@ -14,7 +14,6 @@ const solutions = [
     title: "Engage and develop your people",
     body: "Run pulse surveys, 360° assessments and lifecycle feedback to understand and grow your teams.",
     points: ["Engagement & eNPS", "360° assessments", "Onboarding & exit"],
-    accent: "from-teal-500 to-teal-700",
   },
   {
     icon: HeartIcon,
@@ -22,7 +21,6 @@ const solutions = [
     title: "Turn feedback into loyalty",
     body: "Capture customer voice across every touchpoint and act on it with NPS, CSAT and journey analytics.",
     points: ["NPS & CSAT tracking", "Journey feedback", "Closed-loop actions"],
-    accent: "from-grape-500 to-grape-700",
   },
 ];
 
@@ -46,7 +44,7 @@ const modules = [
 
 export function Solutions() {
   return (
-    <section id="solutions" className="bg-ink-50 py-20 lg:py-28">
+    <section id="solutions" className="bg-panel py-20 lg:py-28">
       <div className="container-x">
         <SectionHeading
           eyebrow="Solutions"
@@ -58,29 +56,27 @@ export function Solutions() {
           {solutions.map((s) => (
             <div
               key={s.tag}
-              className="group relative overflow-hidden rounded-3xl border border-ink-100 bg-white p-8 transition-shadow hover:shadow-xl hover:shadow-ink-900/5"
+              className="group surface-card card-lift overflow-hidden p-8"
             >
               <div className="flex items-center gap-4">
-                <span
-                  className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${s.accent} text-white shadow-sm`}
-                >
+                <span className="inline-flex h-14 w-14 items-center justify-center rounded-card bg-brand text-brand-ink shadow-soft">
                   <s.icon className="text-[1.75rem]" />
                 </span>
-                <span className="text-sm font-semibold uppercase tracking-wide text-ink-400">
+                <span className="text-sm font-semibold uppercase tracking-wide text-faint">
                   {s.tag}
                 </span>
               </div>
-              <h3 className="mt-6 text-2xl font-semibold tracking-tight text-ink-900">
+              <h3 className="mt-6 text-2xl font-semibold tracking-tight text-fg">
                 {s.title}
               </h3>
-              <p className="mt-3 text-base leading-relaxed text-ink-600">
+              <p className="mt-3 text-base leading-relaxed text-muted">
                 {s.body}
               </p>
               <ul className="mt-6 flex flex-wrap gap-2">
                 {s.points.map((p) => (
                   <li
                     key={p}
-                    className="rounded-full bg-ink-50 px-3 py-1.5 text-sm font-medium text-ink-700"
+                    className="rounded-btn bg-panel px-3 py-1.5 text-sm font-medium text-muted ring-1 ring-inset ring-line"
                   >
                     {p}
                   </li>
@@ -102,15 +98,13 @@ export function Solutions() {
           {modules.map((m) => (
             <div
               key={m.title}
-              className="rounded-3xl border border-ink-100 bg-white p-6 transition-colors hover:border-teal-200"
+              className="surface-card p-6 transition-colors hover:border-line-strong"
             >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-card bg-panel text-brand-text ring-1 ring-inset ring-line">
                 <m.icon className="text-xl" />
               </span>
-              <h4 className="mt-4 text-base font-semibold text-ink-900">
-                {m.title}
-              </h4>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink-600">
+              <h4 className="mt-4 text-base font-semibold text-fg">{m.title}</h4>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">
                 {m.body}
               </p>
             </div>

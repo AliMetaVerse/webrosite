@@ -42,12 +42,12 @@ const badges = [
 
 export function Footer() {
   return (
-    <footer id="contact" className="border-t border-ink-100 bg-ink-50">
+    <footer id="contact" className="border-t border-line bg-panel">
       <div className="container-x py-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2.6fr]">
           <div className="max-w-sm">
             <Logo />
-            <p className="mt-5 text-sm leading-relaxed text-ink-600">
+            <p className="mt-5 text-sm leading-relaxed text-muted">
               The most versatile Survey and Reporting platform with advanced AI
               capabilities. We&apos;re your partners in creating customer and
               employee experiences that truly matter.
@@ -56,7 +56,7 @@ export function Footer() {
               {badges.map((b) => (
                 <span
                   key={b}
-                  className="rounded-full bg-white px-3 py-1 text-xs font-medium text-ink-600 ring-1 ring-inset ring-ink-200"
+                  className="rounded-btn bg-card px-3 py-1 text-xs font-medium text-muted ring-1 ring-inset ring-line"
                 >
                   {b}
                 </span>
@@ -65,7 +65,7 @@ export function Footer() {
             <Link
               href="#"
               aria-label="Webropol on LinkedIn"
-              className="mt-6 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink-500 ring-1 ring-inset ring-ink-200 transition-colors hover:text-teal-700"
+              className="mt-6 inline-flex h-10 w-10 items-center justify-center rounded-full bg-card text-faint ring-1 ring-inset ring-line transition-colors hover:text-brand-text"
             >
               <LinkedInIcon className="text-xl" />
             </Link>
@@ -74,15 +74,13 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {columns.map((col) => (
               <div key={col.title}>
-                <h3 className="text-sm font-semibold text-ink-900">
-                  {col.title}
-                </h3>
+                <h3 className="text-sm font-semibold text-fg">{col.title}</h3>
                 <ul className="mt-4 space-y-3">
                   {col.links.map((link) => (
                     <li key={link}>
                       <Link
                         href="#"
-                        className="text-sm text-ink-600 transition-colors hover:text-teal-700"
+                        className="text-sm text-muted transition-colors hover:text-brand-text"
                       >
                         {link}
                       </Link>
@@ -94,16 +92,16 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-ink-200 pt-8 text-sm text-ink-500 sm:flex-row">
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-line pt-8 text-sm text-faint sm:flex-row">
           <p>© 2026 Webropol</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <Link href="#" className="hover:text-teal-700">
+            <Link href="#" className="hover:text-brand-text">
               Accessibility statement
             </Link>
-            <Link href="#" className="hover:text-teal-700">
+            <Link href="#" className="hover:text-brand-text">
               Privacy policy
             </Link>
-            <Link href="#login" className="hover:text-teal-700">
+            <Link href="#login" className="hover:text-brand-text">
               Login
             </Link>
           </div>
