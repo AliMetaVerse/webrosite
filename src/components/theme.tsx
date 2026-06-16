@@ -31,7 +31,7 @@ export const THEMES: {
 ];
 
 export const STORAGE_KEY = "wbpl-design-theme";
-export const DEFAULT_THEME: ThemeId = "editorial";
+export const DEFAULT_THEME: ThemeId = "cinematic";
 const EVENT = "wbpl-theme-change";
 
 /** Runs before paint (injected in <head>) so the page never flashes the

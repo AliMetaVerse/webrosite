@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Widget } from "@/lib/widgets";
+import {
+  clearLocalWidgets,
+  loadLocalWidgets,
+  saveLocalWidgets,
+} from "@/lib/widgets-client";
 import { CloseIcon, GearIcon, PlusIcon, TrashIcon } from "./icons";
 
 function blankWidget(): Widget {
@@ -23,10 +29,14 @@ export function WidgetSettings({
   const [open, setOpen] = useState(false);
   const [widgets, setWidgets] = useState<Widget[]>(initialWidgets);
   const [notice, setNotice] = useState<string | null>(null);
+  const [usingLocal, setUsingLocal] = useState(false);
 
-  // Reset edits to the build-time config each time the panel opens.
+  // Load the browser-local override if one exists, otherwise the build-time
+  // config, each time the panel opens.
   function openPanel() {
-    setWidgets(initialWidgets);
+    const local = loadLocalWidgets();
+    setWidgets(local ?? initialWidgets);
+    setUsingLocal(local != null);
     setNotice(null);
     setOpen(true);
   }
@@ -46,12 +56,8 @@ export function WidgetSettings({
     );
   }
 
-  // This site is statically hosted (GitHub Pages), so there is no server to
-  // persist edits. Copy the config as JSON for the admin to commit to
-  // data/widgets.json — pushing it rebuilds and publishes for every visitor.
-  async function onCopyConfig() {
-    setNotice(null);
-    const json = JSON.stringify(
+  function configJson(): string {
+    return JSON.stringify(
       widgets.map((w) => ({
         id: w.id,
         name: w.name,
@@ -61,8 +67,33 @@ export function WidgetSettings({
       null,
       2,
     );
+  }
+
+  // Persist edits to this browser only (localStorage). The popups update live
+  // for testing — no commit or rebuild needed. Other visitors are unaffected.
+  function onSaveLive() {
+    saveLocalWidgets(widgets);
+    setUsingLocal(true);
+    setNotice(
+      "Saved in this browser — popups update live. Use Copy config JSON to publish for everyone.",
+    );
+  }
+
+  // Drop the local override and revert to the published data/widgets.json.
+  function onReset() {
+    clearLocalWidgets();
+    setWidgets(initialWidgets);
+    setUsingLocal(false);
+    setNotice("Reverted to the published config (data/widgets.json).");
+  }
+
+  // This site is statically hosted (GitHub Pages), so there is no server to
+  // persist edits for everyone. Copy the config as JSON for the admin to commit
+  // to data/widgets.json — pushing it rebuilds and publishes for every visitor.
+  async function onCopyConfig() {
+    setNotice(null);
     try {
-      await navigator.clipboard.writeText(json);
+      await navigator.clipboard.writeText(configJson());
       setNotice(
         "Copied. Commit it to data/widgets.json and push to publish for all visitors.",
       );
@@ -85,7 +116,8 @@ export function WidgetSettings({
         <GearIcon className="text-base" />
       </button>
 
-      {open ? (
+      {open
+        ? createPortal(
         <div
           className="fixed inset-0 z-[2147483600] flex items-start justify-center overflow-y-auto bg-ink-900/40 p-4 backdrop-blur-sm sm:p-8"
           role="dialog"
@@ -102,8 +134,9 @@ export function WidgetSettings({
                   Popup &amp; embed code
                 </h2>
                 <p className="text-sm text-ink-500">
-                  Paste survey or chat embed snippets, then copy the config and
-                  commit it to publish.
+                  Paste survey or chat snippets. <strong>Save</strong> to test
+                  them live in this browser, or copy the config to publish for
+                  everyone.
                 </p>
               </div>
               <button
@@ -180,31 +213,46 @@ export function WidgetSettings({
             <div className="flex flex-col gap-3 border-t border-ink-100 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
               {notice ? (
                 <span className="text-sm text-ink-600">{notice}</span>
+              ) : usingLocal ? (
+                <span className="text-sm text-ink-400">
+                  Testing a browser-local override — not yet published.
+                </span>
               ) : (
                 <span className="text-sm text-ink-400">
-                  Edits publish via <code>data/widgets.json</code>.
+                  Save tests live here; publish via <code>data/widgets.json</code>.
                 </span>
               )}
-              <div className="flex shrink-0 items-center justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full px-4 py-2 text-sm font-medium text-ink-600 hover:bg-ink-50"
-                >
-                  Close
-                </button>
+              <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+                {usingLocal ? (
+                  <button
+                    type="button"
+                    onClick={onReset}
+                    className="rounded-full px-3 py-2 text-sm font-medium text-ink-500 hover:bg-ink-50"
+                  >
+                    Reset to published
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={onCopyConfig}
-                  className="rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700"
+                  className="rounded-full border border-ink-200 px-4 py-2 text-sm font-medium text-ink-700 hover:bg-ink-50"
                 >
                   Copy config JSON
+                </button>
+                <button
+                  type="button"
+                  onClick={onSaveLive}
+                  className="rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700"
+                >
+                  Save
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }

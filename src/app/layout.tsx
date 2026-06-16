@@ -63,7 +63,7 @@ export default async function RootLayout({
         <Navbar initialWidgets={widgets} />
         <main className="flex-1">{children}</main>
         <Footer />
-        <WidgetInjector widgets={widgets.filter((w) => w.enabled)} />
+        <WidgetInjector widgets={widgets} />
       </body>
     </html>
   );

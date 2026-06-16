@@ -1,19 +1,33 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Widget } from "@/lib/widgets";
+import { loadLocalWidgets, subscribeLocalWidgets } from "@/lib/widgets-client";
 
 // Injects each enabled snippet's raw HTML + scripts into the page.
+//
+// The `widgets` prop is the build-time config (data/widgets.json). A
+// browser-local override saved from the settings panel takes precedence for
+// live testing, and we re-render whenever that override changes.
 //
 // Why not dangerouslySetInnerHTML? Browsers do NOT execute <script> tags that
 // arrive via innerHTML. Third-party survey/chat embeds rely on their scripts
 // running, so we append a wrapper and then replace every <script> inside it with
 // a freshly-created one, which the browser does execute.
 export function WidgetInjector({ widgets }: { widgets: Widget[] }) {
+  const [active, setActive] = useState<Widget[]>(widgets);
+
+  // Prefer the local override (if any), and stay in sync with live saves.
+  useEffect(() => {
+    const sync = () => setActive(loadLocalWidgets() ?? widgets);
+    sync();
+    return subscribeLocalWidgets(sync);
+  }, [widgets]);
+
   useEffect(() => {
     const wrappers: HTMLElement[] = [];
 
-    for (const w of widgets) {
+    for (const w of active) {
       if (!w.enabled || !w.code.trim()) continue;
 
       const wrapper = document.createElement("div");
@@ -37,8 +51,8 @@ export function WidgetInjector({ widgets }: { widgets: Widget[] }) {
     return () => {
       wrappers.forEach((el) => el.remove());
     };
-    // Re-run if the snippet set changes (e.g. after a save + refresh).
-  }, [widgets]);
+    // Re-run whenever the active snippet set changes (build-time or local save).
+  }, [active]);
 
   return null;
 }
