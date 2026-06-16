@@ -4,8 +4,9 @@ import Image from "next/image";
 import { Button } from "../ui";
 import { ArrowRightIcon, SparklesIcon } from "../icons";
 import { useTheme } from "../theme";
+import { asset } from "@/lib/base-path";
 
-const HERO_IMG = "/img/puolikaarihero-JPEG-v5-1536x1171.jpg";
+const HERO_IMG = asset("/img/puolikaarihero-JPEG-v5-1536x1171.jpg");
 
 const stats = [
   { value: "10M+", label: "Responses a year" },

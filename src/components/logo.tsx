@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { asset } from "@/lib/base-path";
+
 /**
  * Webropol wordmark. The brand "primary" lockup reads well on the light
  * themes (editorial, swiss); the white variant is swapped in for the dark
@@ -9,14 +11,14 @@ export function Logo({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center ${className}`}>
       <img
-        src="/img/logo/webropol-logo-noslogan-primary.svg"
+        src={asset("/img/logo/webropol-logo-noslogan-primary.svg")}
         alt="Webropol"
         className="logo-img logo-img--light h-7 w-auto"
         width={161}
         height={28}
       />
       <img
-        src="/img/logo/webropol-logo-noslogan-white.svg"
+        src={asset("/img/logo/webropol-logo-noslogan-white.svg")}
         alt="Webropol"
         className="logo-img logo-img--dark h-7 w-auto"
         width={161}

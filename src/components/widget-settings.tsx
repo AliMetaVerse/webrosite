@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { saveWidgets } from "@/app/actions";
 import type { Widget } from "@/lib/widgets";
 import { CloseIcon, GearIcon, PlusIcon, TrashIcon } from "./icons";
-
-const TOKEN_KEY = "wbpl-widget-admin-token";
 
 function blankWidget(): Widget {
   // Math.random / Date.now would break framework determinism elsewhere, but
@@ -25,21 +22,12 @@ export function WidgetSettings({
 }) {
   const [open, setOpen] = useState(false);
   const [widgets, setWidgets] = useState<Widget[]>(initialWidgets);
-  // Restore a previously-entered admin token (lazy: localStorage is
-  // browser-only, and the modal that shows this field isn't rendered on the
-  // server, so there's no hydration mismatch).
-  const [token, setToken] = useState(() =>
-    typeof window !== "undefined"
-      ? localStorage.getItem(TOKEN_KEY) ?? ""
-      : "",
-  );
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
-  // Reset edits to the latest server state each time the panel opens.
+  // Reset edits to the build-time config each time the panel opens.
   function openPanel() {
     setWidgets(initialWidgets);
-    setError(null);
+    setNotice(null);
     setOpen(true);
   }
 
@@ -58,25 +46,30 @@ export function WidgetSettings({
     );
   }
 
-  async function onSave() {
-    setSaving(true);
-    setError(null);
-    localStorage.setItem(TOKEN_KEY, token);
+  // This site is statically hosted (GitHub Pages), so there is no server to
+  // persist edits. Copy the config as JSON for the admin to commit to
+  // data/widgets.json — pushing it rebuilds and publishes for every visitor.
+  async function onCopyConfig() {
+    setNotice(null);
+    const json = JSON.stringify(
+      widgets.map((w) => ({
+        id: w.id,
+        name: w.name,
+        code: w.code,
+        enabled: w.enabled,
+      })),
+      null,
+      2,
+    );
     try {
-      const res = await saveWidgets(widgets, token || undefined);
-      if (!res.ok) {
-        setError(res.error);
-        setSaving(false);
-        return;
-      }
-      // Full reload guarantees third-party scripts re-inject cleanly.
-      window.location.reload();
-    } catch (e) {
-      // Never leave the button stuck on "Saving…".
-      setError(
-        e instanceof Error ? e.message : "Save failed. Please try again.",
+      await navigator.clipboard.writeText(json);
+      setNotice(
+        "Copied. Commit it to data/widgets.json and push to publish for all visitors.",
       );
-      setSaving(false);
+    } catch {
+      setNotice(
+        "Copy failed — manually move your snippets into data/widgets.json and push to publish.",
+      );
     }
   }
 
@@ -109,8 +102,8 @@ export function WidgetSettings({
                   Popup &amp; embed code
                 </h2>
                 <p className="text-sm text-ink-500">
-                  Paste survey or chat embed snippets. They run for every
-                  visitor.
+                  Paste survey or chat embed snippets, then copy the config and
+                  commit it to publish.
                 </p>
               </div>
               <button
@@ -185,31 +178,27 @@ export function WidgetSettings({
             </div>
 
             <div className="flex flex-col gap-3 border-t border-ink-100 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <input
-                type="password"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                placeholder="Admin token (if required)"
-                className="w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 sm:max-w-[220px]"
-              />
-              <div className="flex items-center justify-end gap-3">
-                {error ? (
-                  <span className="text-sm text-red-600">{error}</span>
-                ) : null}
+              {notice ? (
+                <span className="text-sm text-ink-600">{notice}</span>
+              ) : (
+                <span className="text-sm text-ink-400">
+                  Edits publish via <code>data/widgets.json</code>.
+                </span>
+              )}
+              <div className="flex shrink-0 items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   className="rounded-full px-4 py-2 text-sm font-medium text-ink-600 hover:bg-ink-50"
                 >
-                  Cancel
+                  Close
                 </button>
                 <button
                   type="button"
-                  onClick={onSave}
-                  disabled={saving}
-                  className="rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 disabled:opacity-60"
+                  onClick={onCopyConfig}
+                  className="rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700"
                 >
-                  {saving ? "Saving…" : "Save & apply"}
+                  Copy config JSON
                 </button>
               </div>
             </div>
